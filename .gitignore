@@ -1,0 +1,21 @@
+# Node modules
+/node_modules/
+
+# Logs
+*.log
+
+# Environment files
+.env
+
+# Electron build files
+/dist/
+build/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# npm package-lock files (optional but common)
+package-lock.json
+
+out/

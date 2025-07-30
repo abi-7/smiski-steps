@@ -1,0 +1,23 @@
+{
+  "name": "smiski-steps",
+  "version": "1.0.0",
+  "description": "Smiski themed to-do list",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abi-7/smiski-steps.git"
+  },
+  "author": "Abigail Ferreira",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/abi-7/smiski-steps/issues"
+  },
+  "homepage": "https://github.com/abi-7/smiski-steps#readme",
+  "devDependencies": {
+    "electron": "^37.2.4"
+  }
+}
