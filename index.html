@@ -14,7 +14,34 @@
     <link href="./styles.css" rel="stylesheet" />
   </head>
   <body>
-    <div id="center"></div>
+    <div id="main">
+      <div id="center">
+        <h1>Smiski Steps</h1>
+        <div id="taskList">
+          <ul id="taskUl"></ul>
+        </div>
+      </div>
+      <div id="footer">
+        <button id="newTaskBtn" class="button-19" role="button">
+          New Task
+        </button>
+      </div>
+      <!-- Modal for task input -->
+      <div id="taskModal" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <h2>Enter a Task</h2>
+          <div id="taskInput">
+            <input
+              type="text"
+              id="taskInputField"
+              placeholder="Enter a new task"
+            />
+            <button class="addTaskBtn">Add Task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <script src="src/list.js"></script>
   </body>
-  <script src="./renderer.js"></script>
 </html>

@@ -11,6 +11,9 @@ const createWindow = () => {
   });
 
   win.loadFile("index.html");
+
+  win.setMenuBarVisibility(false);
+  win.setMenu(null);
 };
 
 app.whenReady().then(() => {
