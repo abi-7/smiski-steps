@@ -1,0 +1,49 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+@font-face {
+  font-family: "pixel";
+  src: url(./public/images/fonts/04B30.TTF) format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+body {
+  font-family: "pixel", sans-serif;
+  background-color: #ccd3a6;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 10px;
+  height: 100vh;
+}
+
+#center {
+  width: 75vw;
+  height: 75vh;
+  padding: 20px;
+  background-color: #fdede3;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  border-radius: 10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+}
+
+h1 {
+  font-size: 1.5rem;
+  color: #181818;
+}
+
+#title {
+  display: flex;
+  align-items: center;
+  gap: 100px;
+  margin-bottom: 30px;
+}
