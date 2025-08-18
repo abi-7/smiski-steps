@@ -20,8 +20,6 @@ window.addEventListener("click", (event) => {
 });
 
 document.addEventListener("DOMContentLoaded", async () => {
-  console.log("DOM loaded, checking for elements...");
-
   const taskListEl = document.getElementById("taskUl");
   console.log("taskUl element:", taskListEl);
 
@@ -51,14 +49,35 @@ document.addEventListener("DOMContentLoaded", async () => {
     tasks.forEach((task, index) => {
       console.log(`Creating li for task ${index}:`, task);
       const li = document.createElement("li");
-      li.textContent = task;
-      li.style.cursor = "pointer";
-      li.style.padding = "8px";
-      li.style.marginBottom = "4px";
-      li.style.backgroundColor = "#f0f0f0";
-      li.style.borderRadius = "4px";
+      li.className = "task-item";
 
-      li.addEventListener("click", async () => {
+      // create the checkbox wrapper HTML structure
+      li.innerHTML = `
+        <div class="checkbox-wrapper">
+          <input class="inp-cbx" id="cbx-${index}" type="checkbox"/>
+          <label class="cbx" for="cbx-${index}">
+            <span>
+              <svg width="12px" height="9px" viewBox="0 0 12 9">
+                <polyline points="1 5 4 8 11 1"></polyline>
+              </svg>
+            </span>
+            <span>${task}</span>
+          </label>
+        </div>
+      `;
+
+      // Add click event to checkbox for task completion
+      const checkbox = li.querySelector(".inp-cbx");
+      const label = li.querySelector(".cbx");
+
+      //handle checkbox toggle
+      checkbox.addEventListener("change", () => {
+        label.classList.toggle("completed", checkbox.checked);
+        console.log(`Task "${task}" completion toggled`);
+      });
+
+      // Double-click to delete
+      li.addEventListener("dblclick", async () => {
         console.log(`Removing task at index ${index}`);
         tasks = await window.api.removeTask(index);
         renderTasks();
