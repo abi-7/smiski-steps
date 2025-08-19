@@ -13,6 +13,8 @@ const createWindow = () => {
   const win = new BrowserWindow({
     width: 600,
     height: 700,
+    resizable: false,
+    movable: true,
     webPreferences: {
       preload: path.join(process.cwd(), "preload.js"),
       contextIsolation: true,

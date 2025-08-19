@@ -6,18 +6,30 @@
 
 @font-face {
   font-family: "pixel";
-  src: url(./public/images/fonts/04B30.TTF) format("truetype");
+  src: url(./assets/Moochi-Jelly.otf) format("opentype");
   font-weight: normal;
   font-style: normal;
 }
 
 body {
   font-family: "pixel", sans-serif;
-  background-color: #ccd3a6;
   display: flex;
   justify-content: center;
   align-items: flex-start;
   height: 100vh;
+  background-image: url("./assets/smiski-bg.png");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-attachment: fixed;
+}
+
+h1 {
+  font-family: "pixel", Arial, sans-serif;
+  font-size: 2.5rem;
+  color: #333;
+  margin: 20px 0;
+  text-align: center;
 }
 
 #main {
@@ -28,19 +40,30 @@ body {
 }
 
 #center {
-  width: 75vw;
+  width: 60vw;
   height: 65vh;
   margin-top: 45px;
-  background-color: #fdede3;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(
+    253,
+    237,
+    227,
+    0.25
+  ); /* Semi-transparent version of your original color */
+  backdrop-filter: blur(10px); /* Creates the frosted glass effect */
+  -webkit-backdrop-filter: blur(10px); /* Safari support */
+
+  border: 1px solid rgba(255, 255, 255, 0.18); /* Subtle white border */
+  box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37),
+    /* Soft shadow */ inset 0 1px 0 rgba(255, 255, 255, 0.1); /* Inner highlight */
+
   text-align: center;
-  border-radius: 10px;
+  border-radius: 15px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
   position: relative;
-  margin-bottom: 60px;
+  margin-bottom: 50px;
 }
 
 .button-19 {
