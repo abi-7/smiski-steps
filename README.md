@@ -18,6 +18,9 @@ Delete tasks you no longer need by double clicking the task.
 
 Let your glowing Smiski cheer you on as you complete your list!
 
+<h1>📷 App Preview </h1>
+
+<img src="./assets/smiski-steps.gif" width="400" height="500">
 
 <h1>🛠️ Tech Stack</h1>
 
@@ -28,5 +31,6 @@ Design: Smiski background designed in Canva (custom assets)
 <h1></h1>
 
 Made with ❤️ by Abigail Ferreira
+
 
 
