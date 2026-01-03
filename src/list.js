@@ -27,13 +27,24 @@ document.addEventListener("DOMContentLoaded", async () => {
 
   console.log("window.api:", window.api);
 
-  //load tasks, with error handling
+  // Helper to normalize older string-only tasks to object form { text, completed }
+  function normalizeTasks(arr) {
+    if (!Array.isArray(arr)) return [];
+    return arr.map((item) => {
+      if (typeof item === "string") return { text: item, completed: false };
+      if (item && typeof item === "object") {
+        return { text: item.text ?? "", completed: !!item.completed };
+      }
+      return { text: String(item), completed: false };
+    });
+  }
+
+  // Load persisted tasks from main process (electron-store) on startup
   try {
-    tasks = (await window.api.loadTasks()) || [];
-    console.log("Loaded tasks:", tasks);
-  } catch (error) {
-    console.error("Error loading tasks:", error);
-    tasks = [];
+    const loaded = await window.api.loadTasks();
+    tasks = normalizeTasks(loaded);
+  } catch (err) {
+    console.error("Failed to load tasks from storage:", err);
   }
 
   function renderTasks() {
@@ -51,17 +62,16 @@ document.addEventListener("DOMContentLoaded", async () => {
       const li = document.createElement("li");
       li.className = "task-item";
 
-      // create the checkbox wrapper HTML structure
       li.innerHTML = `
         <div class="checkbox-wrapper">
-          <input class="inp-cbx" id="cbx-${index}" type="checkbox"/>
+          <input class="inp-cbx" id="cbx-${index}" type="checkbox" ${task.completed ? "checked" : ""}/>
           <label class="cbx" for="cbx-${index}">
             <span>
               <svg width="12px" height="9px" viewBox="0 0 12 9">
                 <polyline points="1 5 4 8 11 1"></polyline>
               </svg>
             </span>
-            <span>${task}</span>
+            <span>${task.text}</span>
           </label>
         </div>
       `;
@@ -70,16 +80,54 @@ document.addEventListener("DOMContentLoaded", async () => {
       const checkbox = li.querySelector(".inp-cbx");
       const label = li.querySelector(".cbx");
 
-      //handle checkbox toggle
-      checkbox.addEventListener("change", () => {
-        label.classList.toggle("completed", checkbox.checked);
-        console.log(`Task "${task}" completion toggled`);
+      // Reflect initial completed state
+      if (task.completed) {
+        label.classList.add("completed");
+      }
+
+      checkbox.addEventListener("change", async () => {
+        const checked = checkbox.checked;
+        label.classList.toggle("completed", checked);
+        console.log(`Task "${task.text}" completion toggled to ${checked}`);
+
+        // Move the task to the correct section
+        // completed tasks go to the bottom
+        try {
+          // Remove the task from its current index
+          const [moved] = tasks.splice(index, 1);
+          if (moved) {
+            moved.completed = checked;
+
+            if (checked) {
+              // When completed, push to the end
+              tasks.push(moved);
+            } else {
+              // When unchecking, insert before the first completed task
+              // keep incomplete section together
+              const firstCompletedIndex = tasks.findIndex((t) => t.completed);
+              if (firstCompletedIndex === -1) {
+                // No completed tasks, append to end (all incomplete)
+                tasks.push(moved);
+              } else {
+                tasks.splice(firstCompletedIndex, 0, moved);
+              }
+            }
+
+            // Persist new order
+            await window.api.saveTasks(tasks);
+            // Re-render to show updated order and re-bind handlers
+            renderTasks();
+          }
+        } catch (err) {
+          console.error("Failed to move/persist task:", err);
+        }
       });
 
       // Double-click to delete
       li.addEventListener("dblclick", async () => {
         console.log(`Removing task at index ${index}`);
-        tasks = await window.api.removeTask(index);
+        const res = await window.api.removeTask(index);
+        tasks = normalizeTasks(res);
         renderTasks();
       });
       taskListEl.appendChild(li);
@@ -98,7 +146,9 @@ document.addEventListener("DOMContentLoaded", async () => {
     if (taskText !== "") {
       try {
         console.log("Adding task:", taskText);
-        tasks = await window.api.addTask(taskText);
+        const newTask = { text: taskText, completed: false };
+        const res = await window.api.addTask(newTask);
+        tasks = normalizeTasks(res);
         console.log("Tasks after adding:", tasks);
         input.value = "";
         renderTasks();
@@ -113,6 +163,24 @@ document.addEventListener("DOMContentLoaded", async () => {
   input.addEventListener("keypress", (event) => {
     if (event.key === "Enter") {
       addBtn.click();
+    }
+  });
+
+  // Clear All button (with confirmation)
+  const clearAllBtn = document.getElementById("clearAllBtn");
+
+  clearAllBtn?.addEventListener("click", async () => {
+    const confirmed = window.confirm(
+      "Are you sure you want to clear all tasks? This cannot be undone."
+    );
+    if (!confirmed) return;
+    try {
+      await window.api.saveTasks([]);
+      tasks = [];
+      renderTasks();
+      console.log("All tasks cleared");
+    } catch (err) {
+      console.error("Failed to clear tasks:", err);
     }
   });
 });
