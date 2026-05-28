@@ -16,7 +16,7 @@ const createWindow = () => {
     resizable: false,
     movable: true,
     webPreferences: {
-      preload: path.join(process.cwd(), "preload.js"),
+      preload: path.join(__dirname, "preload.js"),
       contextIsolation: true,
       nodeIntegration: false,
       sandbox: false,
